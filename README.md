@@ -1,0 +1,2 @@
+# WCH_V307_RISC-V
+Bare metal programming on WCH RISC-V MCU CH32V307VCT6 board (CH32V307V-EVT-R1)
