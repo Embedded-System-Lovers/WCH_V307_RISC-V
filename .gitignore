@@ -1,0 +1,9 @@
+# ignore output files
+/Output
+
+# ignore Visual Studio's user-specific files
+/.vs/
+/*.user
+
+# ignore segger embedded studio debug session log
+/Debug/*.emSession

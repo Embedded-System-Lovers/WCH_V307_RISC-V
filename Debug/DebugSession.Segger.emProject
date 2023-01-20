@@ -1,0 +1,32 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="WCH_V307_RISC-V" target="20" version="2">
+  <project Name="Debug">
+    <configuration
+      Name="Common"
+      debug_enable_RTT="No"
+      debug_entry_point_symbol="_start"
+      debug_initial_breakpoint="Startup_Init"
+      debug_initial_breakpoint_set_option="Always"
+      debug_register_definition_file="$(ProjectDir)/CH32V307xx.svd"
+      debug_restrict_memory_access="No"
+      debug_startup_completion_point="Startup_Init"
+      debug_target_connection="GDB Server"
+      external_build_file_name="$(ProjectDir)/../Output/BareMetal_WCH_V307_RISC-V.elf"
+      gdb_breakpoint_types="Hardware Only"
+      gdb_server_allow_memory_access_during_execution="Yes"
+      gdb_server_autostart_server="Yes"
+      gdb_server_command_line="openocd -f wch-riscv.cfg"
+      gdb_server_connect_timeout="10"
+      gdb_server_ignore_checksum_errors="No"
+      gdb_server_port="3333"
+      gdb_server_register_access="General and Individual"
+      gdb_server_reset_command="reset halt"
+      gdb_server_type="OpenOCD"
+      project_directory=""
+      project_type="Externally Built Executable"
+      rv_abi="ilp32"
+      rv_architecture="rv32i"
+      rv_debug_extensions="None"
+      target_device_name="RISC-V" />
+  </project>
+</solution>
