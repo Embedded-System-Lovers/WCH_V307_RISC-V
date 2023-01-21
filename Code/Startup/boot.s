@@ -18,11 +18,11 @@
 .file "boot.s"
 
 /*******************************************************************************************
-  \brief  
+  \brief  entry point
   
-  \param  
+  \param  void
   
-  \return 
+  \return void
 ********************************************************************************************/
 .section .text
 .type _start, @function
@@ -32,8 +32,9 @@
 .globl _start
 
 _start:
-        /* disable all interrupts flag */
-        csrw mstatus, x0
+        /* disable all interrupts and enable the FPU */
+        li x1, 0x2000
+        csrw mstatus, x1
 
         /* disable all specific interrupt sources */
         csrw mie, x0
@@ -41,7 +42,7 @@ _start:
         /* setup the stack pointer */
         la sp, __STACK_TOP
 
-
+        /* jump to the C runtime initialization */
         j Startup_Init
 
 .size _start, .-_start

@@ -60,7 +60,7 @@ VERBOSE_GCC = -frecord-gcc-switches -fverbose-asm
 # Target's Compiler flags
 ############################################################################################
 
-ARCH = -march=rv32i -mabi=ilp32 -msmall-data-limit=0 -falign-functions=4
+ARCH = -march=rv32imafc -mabi=ilp32f -msmall-data-limit=0 -falign-functions=4
 
 ############################################################################################
 # C Compiler flags
@@ -77,7 +77,7 @@ COPS  = $(OPT)                                        \
         -Wextra                                       \
         -fomit-frame-pointer                          \
         -gdwarf-2                                     \
-        -fno-exceptions
+        -fsingle-precision-constant
 
 ############################################################################################
 # C++ Compiler flags
@@ -107,8 +107,7 @@ CPPOPS  = $(OPT)                                        \
 ############################################################################################
 
 ifeq ($(AS), $(TOOLCHAIN)-as)
-ASOPS =  -march=rv32i          \
-         -alh 
+ASOPS =  -march=rv32imafc -alh
 else
 ASOPS = $(OPT)                                        \
         $(ARCH)                                       \
@@ -157,9 +156,10 @@ endif
 ############################################################################################
 # Source Files
 ############################################################################################
-SRC_FILES := $(SRC_DIR)/Appli/main.c      \
-             $(SRC_DIR)/Startup/boot.s    \
-             $(SRC_DIR)/Startup/intvect.c \
+SRC_FILES := $(SRC_DIR)/Appli/main.c         \
+             $(SRC_DIR)/Appli/DummyClass.cpp \
+             $(SRC_DIR)/Startup/boot.s       \
+             $(SRC_DIR)/Startup/intvect.c    \
              $(SRC_DIR)/Startup/Startup.c
 
 ############################################################################################
