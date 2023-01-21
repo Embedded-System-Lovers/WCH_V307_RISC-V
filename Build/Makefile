@@ -100,7 +100,8 @@ CPPOPS  = $(OPT)                                        \
           -fno-threadsafe-statics                       \
           -fno-enforce-eh-specs                         \
           -ftemplate-depth=128                          \
-          -Wzero-as-null-pointer-constant
+          -Wzero-as-null-pointer-constant               \
+          -fsingle-precision-constant
 
 ############################################################################################
 # Assembler flags
