@@ -27,7 +27,7 @@ ERR_MSG_FORMATER_SCRIPT = ../Tools/Scripts/CompilerErrorFormater.py
 # Toolchain
 ############################################################################################
 
-TOOLCHAIN = riscv-none-embed
+TOOLCHAIN = riscv64-unknown-elf
 AS        = $(TOOLCHAIN)-g++
 CC        = $(TOOLCHAIN)-g++
 CPP       = $(TOOLCHAIN)-g++
