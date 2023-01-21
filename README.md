@@ -34,9 +34,9 @@ interrupt handler.
 
 ## Building the Application
 
-Build on `*nix*` is easy using an installed `gcc-riscv64-unknown-elf`
+Build on `*nix*` is easy using an installed `gcc-riscv-none-embed`
 
-Both Make and Cmake can be used to build the Application:
+Make can be used to build the Application:
 
 ```sh
 cd WCH_V307_RISC-V
@@ -49,8 +49,8 @@ bash Rebuild.sh
 The build results including ELF-file, HEX-mask, MAP-file
 and assembly list file are created in the `Output` directory.
 
-If `gcc-riscv64-unknown-elf` is not installed, it can easily
-be obtained [here](https://github.com/sifive/freedom-tools/releases).
+If `gcc-riscv-none-embed` is not installed, it can easily
+be obtained [here](https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases).
 Add the path of the RISC-V GCC tools' bin folder to `$PATH`
 in the usual `*nix` way.
 
