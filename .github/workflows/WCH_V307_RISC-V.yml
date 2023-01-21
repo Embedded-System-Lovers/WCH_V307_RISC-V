@@ -1,0 +1,27 @@
+﻿name: WCH_V307_RISC-V
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+jobs:
+  target-gcc-riscv64-unknown-elf:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: |
+          wget --no-check-certificate https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/download/v10.2.0-1.2/xpack-riscv-none-embed-gcc-10.2.0-1.2-linux-x64.tar.gz
+          tar -xvzf xpack-riscv-none-embed-gcc-10.2.0-1.2-linux-x64.tar.gz
+        working-directory: ./Build
+      - name: target-riscv64-unknown-elf
+        run: |
+          PATH=./xpack-riscv-none-embed-gcc-10.2.0-1.2/bin:$PATH
+          bash ./Rebuild.sh
+          ls -la ../Output/BareMetal_WCH_V307_RISC-V.hex
+        working-directory: ./Build
