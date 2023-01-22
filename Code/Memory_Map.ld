@@ -53,7 +53,7 @@ SECTIONS
   .boot : ALIGN(4)
   {
     PROVIDE(__BOOT_BASE_ADDRESS = .);
-    *boot.o(.text)
+    *boot.o(.text*)
     . = ALIGN(4);
   } > FLASH
   
@@ -61,7 +61,7 @@ SECTIONS
   .text : ALIGN(4)
   {
     PROVIDE(__CODE_BASE_ADDRESS = .);
-    *(.text)
+    *(.text*)
     . = ALIGN(4);
   } > FLASH
 
@@ -77,7 +77,7 @@ SECTIONS
   .rodata : ALIGN(4)
   {
     PROVIDE(__RODATA_BASE_ADDRESS = .);
-    *(.rodata)
+    *(.rodata*)
     . = ALIGN(4);
   } > FLASH
 
@@ -86,9 +86,9 @@ SECTIONS
   {
     __CTOR_LIST__ = . ;
     KEEP (*(SORT(.ctors.*)))
-    KEEP (*(.ctors))
+    KEEP (*(.ctors*))
     KEEP (*(SORT(.init_array.*)))
-    KEEP (*(.init_array))
+    KEEP (*(.init_array*))
     LONG(-1) ;
     __CTOR_END__ = . ;
   }  > FLASH
@@ -99,9 +99,9 @@ SECTIONS
   {
     __DTOR_LIST__ = . ;
     KEEP (*(SORT(.dtors.*)))
-    KEEP (*(.dtors))
+    KEEP (*(.dtors*))
     KEEP (*(SORT(.fini_array.*)))
-    KEEP (*(.fini_array))
+    KEEP (*(.fini_array*))
     LONG(-1) ;
     __DTOR_END__ = . ;
   } > FLASH
@@ -127,26 +127,26 @@ SECTIONS
   /* The FLASH-to-RAM initialized data sections */
   .data : ALIGN(4) 
   {
-    *(.data)
+    *(.data*)
     . = ALIGN(4);
   } > RAM  AT>FLASH
   
   .sdata : ALIGN(4) 
   {
-    *(.sdata)
+    *(.sdata*)
     . = ALIGN(4);
   } > RAM  AT>FLASH
 
   /* The uninitialized (zero-cleared) data sections */
   .bss : ALIGN(4)
   {
-    *(.bss)
+    *(.bss*)
     . = ALIGN(4);
   } > RAM
   
   .sbss : ALIGN(4)
   {
-    *(.sbss)
+    *(.sbss*)
     . = ALIGN(4);
   } > RAM
 
