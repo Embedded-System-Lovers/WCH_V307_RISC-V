@@ -36,15 +36,20 @@ interrupt handler.
 
 Build on `*nix*` is easy using an installed `gcc-riscv-none-embed`
 
-Make can be used to build the Application:
+Make or CMake can be used to build the Application:
 
 ```sh
 cd WCH_V307_RISC-V
-cd Build
 ```
 ### Make
-```
+```sh
+cd Build
 bash Rebuild.sh
+```
+### CMake
+```sh
+mkdir -p Output && cd Output
+cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-unix.cmake .. && make
 ```
 The build results including ELF-file, HEX-mask, MAP-file
 and assembly list file are created in the `Output` directory.
