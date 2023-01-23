@@ -54,7 +54,7 @@ static void Startup_InitMcuSystem(void);
 // Extern function prototype
 //=========================================================================================
 int main(void) __attribute__((weak));
-void FE310_HwInitialization(void) __attribute__((weak));
+void Mcu_HwInitialization(void) __attribute__((weak));
 
 //-----------------------------------------------------------------------------------------
 /// \brief  Startup_Init function
@@ -175,8 +175,8 @@ static void Startup_Unexpected_Exit(void)
 //-----------------------------------------------------------------------------------------
 static void Startup_InitMcuSystem(void)
 {
-  if(0 != (unsigned long) &FE310_HwInitialization)
+  if(0 != (unsigned long) &Mcu_HwInitialization)
   {
-    FE310_HwInitialization();
+    Mcu_HwInitialization();
   }
 }

@@ -158,7 +158,8 @@ endif
 # Source Files
 ############################################################################################
 SRC_FILES := $(SRC_DIR)/Appli/main.c         \
-             $(SRC_DIR)/Appli/DummyClass.cpp \
+             $(SRC_DIR)/Mcal/Mcu.c           \
+             $(SRC_DIR)/Mcal/SysTick.c       \
              $(SRC_DIR)/Startup/boot.s       \
              $(SRC_DIR)/Startup/intvect.c    \
              $(SRC_DIR)/Startup/Startup.c
