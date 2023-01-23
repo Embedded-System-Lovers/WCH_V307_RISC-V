@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_VERBOSE_MAKEFILE ON) # Set it to ON to have verbose build output
 
 set(DEPLOY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 set(EXECUTABLE_NAME "${CMAKE_PROJECT_NAME}")
@@ -131,7 +132,6 @@ set(CMAKE_ASM_FLAGS "${ASM_FLAGS}")
 set(CMAKE_C_FLAGS "${C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${LD_FLAGS}")
-set(CMAKE_VERBOSE_MAKEFILE OFF) # Set it to ON to have verbose build output
 
 # Construct executable
 add_executable(${EXECUTABLE}
