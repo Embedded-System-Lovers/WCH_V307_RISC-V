@@ -24,6 +24,8 @@
 // Functions prototype
 //=====================================================================================================
 static void UndefinedHandler(void);
+void OsDispatchHandler(void);
+void OsSysTickIsrWrapper(void);
 
 void Isr_InstructionAddressMisaligned (void) __attribute__((weak, alias("UndefinedHandler")));
 void Isr_InstructionAccessFault       (void) __attribute__((weak, alias("UndefinedHandler")));
@@ -134,6 +136,7 @@ void Isr_DMA2_Channel11               (void) __attribute__((weak, alias("Undefin
 //=====================================================================================================
 // Interrupt vector table
 //=====================================================================================================
+void OsIsr_WindowWatchdogIntFunc(void);
 const InterruptHandler __attribute__((aligned(4))) InterruptVectorTable[] =
 {
     (InterruptHandler)&UndefinedHandler,    /*   0  Reserved                                                   */
@@ -148,11 +151,11 @@ const InterruptHandler __attribute__((aligned(4))) InterruptVectorTable[] =
     (InterruptHandler)&Isr_BreakPoint,      /*   9  Breakpoint callback interrupt                              */
     (InterruptHandler)&UndefinedHandler,    /*  10  Reserved                                                   */
     (InterruptHandler)&UndefinedHandler,    /*  11  Reserved                                                   */
-    (InterruptHandler)&Isr_SysTick,         /*  12  System Tick Timer                                          */
+    (InterruptHandler)&OsSysTickIsrWrapper,         /*  12  System Tick Timer                                          */
     (InterruptHandler)&UndefinedHandler,    /*  13  Reserved                                                   */
-    (InterruptHandler)&Isr_SoftwareInt,     /*  14  Software interrupt                                         */
+    (InterruptHandler)&OsDispatchHandler,     /*  14  Software interrupt                                         */
     (InterruptHandler)&UndefinedHandler,    /*  15  Reserved                                                   */
-    (InterruptHandler)&Isr_WWDG,            /*  16  Window Watchdog interrupt                                  */
+    (InterruptHandler)&OsIsr_WindowWatchdogIntFunc,            /*  16  Window Watchdog interrupt                                  */
     (InterruptHandler)&Isr_PVD,             /*  17  PVD through EXTI line detection interrupt                  */
     (InterruptHandler)&Isr_TAMPER,          /*  18  Tamper interrupt                                           */
     (InterruptHandler)&Isr_RTC,             /*  19  RTC global interrupt                                       */

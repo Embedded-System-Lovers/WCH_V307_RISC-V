@@ -157,20 +157,38 @@ endif
 ############################################################################################
 # Source Files
 ############################################################################################
+OSEK_SRC_FILES := $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsSwClz.s          \
+                  $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsAsm.s            \
+                  $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsHwSchedPrio.s    \
+                  $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsHwPltfm.c        \
+                  $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsDummy.asm        \
+                  $(SRC_DIR)/OSEK/OsAlarm.c                            \
+                  $(SRC_DIR)/OSEK/OsCore.c                             \
+                  $(SRC_DIR)/OSEK/OsEvt.c                              \
+                  $(SRC_DIR)/OSEK/OsSched.c                            \
+                  $(SRC_DIR)/OSEK/OsTask.c                             \
+                  $(SRC_DIR)/OSEK/OsTcb.c
+
 SRC_FILES := $(SRC_DIR)/Appli/main.c         \
              $(SRC_DIR)/Mcal/Mcu.c           \
              $(SRC_DIR)/Mcal/SysTick.c       \
              $(SRC_DIR)/Startup/boot.s       \
              $(SRC_DIR)/Startup/intvect.c    \
-             $(SRC_DIR)/Startup/Startup.c
+             $(SRC_DIR)/Startup/Startup.c    \
+             $(SRC_DIR)/Appli/tasks.c        \
+             $(OSEK_SRC_FILES)
 
 ############################################################################################
 # Include Paths
 ############################################################################################
+OSEK_INC_FILES := $(SRC_DIR)/OSEK/HwPlatform/RISC-V     \
+                  $(SRC_DIR)/OSEK
+
 INC_FILES := $(SRC_DIR)         \
              $(SRC_DIR)/Appli   \
              $(SRC_DIR)/Mcal    \
-             $(SRC_DIR)/Startup
+             $(SRC_DIR)/Startup \
+             $(OSEK_INC_FILES)   
 
 ############################################################################################
 # Rules
