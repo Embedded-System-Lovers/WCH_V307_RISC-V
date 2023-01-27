@@ -83,7 +83,7 @@ for line in lines:
         vs_format_msg(line, error_pattern, Color.RED)
 
     if line.find(note_pattern) > 0:
-        vs_format_msg(line, note_pattern, Color.BLUE)
+        vs_format_msg(line, note_pattern, Color.CYAN)
 
     if line.find(warning_pattern_U) > 0:
         vs_format_msg(line, warning_pattern_U, Color.YELLOW)
@@ -92,6 +92,6 @@ for line in lines:
         vs_format_msg(line, error_pattern_U, Color.RED)
 
     if line.find(note_pattern_U) > 0:
-        vs_format_msg(line, note_pattern_U, Color.BLUE)
+        vs_format_msg(line, note_pattern_U, Color.CYAN)
 
 err_file.close()

@@ -1,13 +1,13 @@
 /******************************************************************************************
   Filename    : OsAsm.s
 
-  Core        : RISC-V RV32IMAC
+  Core        : QingKeV4F (RISC-V RV32IMACF)
 
   Author      : Chalandi Amine
 
   Owner       : Chalandi Amine
 
-  Date        : 19.12.2022
+  Date        : 26.01.2023
 
   Description : Context switch and ISR category 2 wrapper
 
@@ -15,7 +15,7 @@
 
 .file "OsAsm.s"
 
-.equ OS_CPU_CONTEXT_USED_REGISTERS, 31
+.equ OS_CPU_CONTEXT_USED_REGISTERS, 32
 
 /*-----------------------------------------------------------------------------------------------------------------*/
 /* \brief  OsSaveCpuContext                                                                                        */
@@ -60,6 +60,9 @@
   sw x31, 29*4(sp)
   csrr x1, mepc
   sw x1,  30*4(sp)
+  la x1, 0xE000E040
+  lw x3, 0(x1)
+  sw x3, 31*4(sp)
 .endm
 
 /*-----------------------------------------------------------------------------------------------------------------*/
@@ -72,6 +75,9 @@
 /* \return void                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------*/
 .macro OsRestoreCpuContext
+  lw x3,  31*4(sp)
+  la x1, 0xE000E040
+  sw x3, 0(x1)
   lw x1,  30*4(sp)
   csrrw zero, mepc, x1
   lw x1,   0*4(sp)
@@ -168,37 +174,6 @@ OsCat2IsrWrapper:
 
 .size OsCat2IsrWrapper, .-OsCat2IsrWrapper
 
-/* ---------------------------------------------------------------------------------------------------------------- */
-/* \brief  OsSysTickIsrWrapper                                                                                      */
-/*                                                                                                                  */
-/* \descr  Wrapper for System tick interrupt                                                                        */
-/*                                                                                                                  */
-/* \param  void                                                                                                     */
-/*                                                                                                                  */
-/* \return void                                                                                                     */
-/* ---------------------------------------------------------------------------------------------------------------- */
-.section ".text"
-.align 4
-.globl  OsSysTickIsrWrapper
-.type   OsSysTickIsrWrapper, % function
-.extern OsStoreStackPointer
-.extern OsRunSysTickIsr
-.extern OsGetSavedStackPointer
-.extern OsIntCallDispatch
-
-OsSysTickIsrWrapper:
-                     OsSaveCpuContext
-                     mv a0, sp
-                     jal OsStoreStackPointer
-                     jal OsRunSysTickIsr
-                     jal OsGetSavedStackPointer
-                     jal OsIntCallDispatch
-                     mv sp, a0
-                     OsRestoreCpuContext
-                     mret
-
-.size OsSysTickIsrWrapper, .-OsSysTickIsrWrapper
-
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* / \brief  OsStartNewTask (OsStartNewTask(uint32 StackFramePtr, pFunc TaskFuncPtr))                                 */
 /* /                                                                                                                  */
@@ -270,3 +245,29 @@ OsGetCurrentSP:
                  ret
 
 .size OsGetCurrentSP, .-OsGetCurrentSP
+
+/*
+
+-----------------------------------------------------------------
+ Register | ABI Name | Description                      | Saver
+-----------------------------------------------------------------
+ x0       | zero     | Hard-wired zero                  | -
+ x1       | ra       | Return address                   | Caller
+ x2       | sp       | Stack pointer                    | Callee
+ x3       | gp       | Global pointer                   | -
+ x4       | tp       | Thread pointer                   | -
+ x5-7     | t0-2     | Temporaries                      | Caller
+ x8       | s0/fp    | Saved register/frame pointer     | Callee
+ x9       | s1       | Saved register                   | Callee
+ x10-11   | a0-1     | Function arguments/return values | Caller
+ x12-17   | a2-7     | Function arguments               | Caller
+ x18-27   | s2-11    | Saved registers                  | Callee
+ x28-31   | t3-6     | Temporaries                      | Caller
+ f0-7     | ft0-7    | FP temporaries                   | Caller
+ f8-9     | fs0-1    | FP saved registers               | Callee
+ f10-11   | fa0-1    | FP arguments/return values       | Caller
+ f12-17   | fa2-7    | FP arguments                     | Caller
+ f18-27   | fs2-11   | FP saved registers               | Callee
+ f28-31   | ft8-11   | FP temporaries                   | Caller
+
+*/

@@ -265,6 +265,8 @@ uint32 OsDispatcher(uint32 StackPtr)
 //------------------------------------------------------------------------------------------------------------------
 ISR(SysTickTimer)
 {
+  PFIC->IPSR1.reg |= (1ul << 16);
+  __asm volatile("FENCE.I");
   OCB_Cfg.OsSysTickCounter++;
   osAlarmsManagement();
   osReloadTimer();
@@ -281,18 +283,27 @@ ISR(SysTickTimer)
 //------------------------------------------------------------------------------------------------------------------
 void OsStoreStackPointer(uint32 StackPtrValue)
 {
-  OCB_Cfg.OsCat2InterruptLevel = 1;
+  /* get the interrupt nesting level */
+  const uint32 OsInterruptNestingDepth = osGetHwIntNestingLevel();
 
-  OCB_Cfg.OsInterruptNestingDeepth++;
+  /* save the interrupt nesting level stack pointer */
+  OCB_Cfg.OsIntNestSavedStackPointer[OsInterruptNestingDepth - 1u] = StackPtrValue;
 
-  if(OCB_Cfg.OsInterruptNestingDeepth == 1) /* store only the 1st entrance, the other nesting interrupts will use the current stack */
+  /* store the preempted task context only in nested level 1,
+     the other nesting interrupts will use the current stack */
+  if(OsInterruptNestingDepth == 1u)
   {
+    /* set the Cat2 interrupt flag */
+    OCB_Cfg.OsCat2InterruptLevel = 1;
+
     if(OCB_Cfg.CurrentTaskIdx < OS_INTERNAL_TASK_ID)
-    {  
+    {
+      /* preempted from task level */
       OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->pCurrentStackPointer = StackPtrValue; /* current task stack will be used */
     }
     else
     {
+      /* preempted from OS level */
       OCB_Cfg.OsCurrentSystemStackPtr = StackPtrValue; /* system stack will be used */
     }
   }
@@ -309,15 +320,23 @@ void OsStoreStackPointer(uint32 StackPtrValue)
 //------------------------------------------------------------------------------------------------------------------
 uint32 OsGetSavedStackPointer(void)
 {
-  OCB_Cfg.OsCat2InterruptLevel = 0;
-  
-  if(OCB_Cfg.CurrentTaskIdx < OS_INTERNAL_TASK_ID)
+  /* get the interrupt nesting level */
+  const uint32 OsInterruptNestingDepth = osGetHwIntNestingLevel();
+
+  if(OsInterruptNestingDepth == 1u)
   {
-    return(OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->pCurrentStackPointer);
+    if(OCB_Cfg.CurrentTaskIdx < OS_INTERNAL_TASK_ID)
+    {
+      return(OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->pCurrentStackPointer);
+    }
+    else
+    {
+      return(OCB_Cfg.OsCurrentSystemStackPtr);
+    }
   }
   else
   {
-    return(OCB_Cfg.OsCurrentSystemStackPtr);
+    return(OCB_Cfg.OsIntNestSavedStackPointer[OsInterruptNestingDepth - 1u]);
   }
 }
 
@@ -332,8 +351,17 @@ uint32 OsGetSavedStackPointer(void)
 //------------------------------------------------------------------------------------------------------------------
 uint32 OsIntCallDispatch(uint32 StackPtr)
 {
-  if(OCB_Cfg.OsInterruptNestingDeepth == 0)
+  /* get the interrupt nesting level */
+  const uint32 OsInterruptNestingDepth = osGetHwIntNestingLevel();
+
+  if(OsInterruptNestingDepth == 1u)
   {
+    /* Disable the Hw nesting */
+    osDisableHwIntNesting();
+
+    /* Reset the flag */
+    OCB_Cfg.OsCat2InterruptLevel = 0;
+    
     if(OCB_Cfg.OsIntCallDispatcher == 1)
     {
       /* The internal system state is changed by the ISR cat2 (an Event is triggred)
@@ -347,24 +375,15 @@ uint32 OsIntCallDispatch(uint32 StackPtr)
     }
     else
     {
-      /* The system behavior is not changed by the ISR cat2 
-         The cpu will restore the context saved by the interrupt*/
-      if(OCB_Cfg.CurrentTaskIdx < OS_INTERNAL_TASK_ID)
-      {
-        /* return the stack pointer of the current task */
-        return(OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->pCurrentStackPointer);
-      }
-      else
-      {
-        /* return the system stack pointer */
-        return(StackPtr);
-      }
+      /* The system behavior is not changed by the ISR cat2
+         The cpu will restore the context saved by the interrupt */
+      return(StackPtr);
     }
   }
   else
   {
-    /* in nesting interrupt behavior */
-    /* restore the stack pointer from the saved context */
+    /* in nesting interrupt behavior
+       restore the stack pointer from the saved context */
     return(StackPtr);
   }
 }  
@@ -512,7 +531,7 @@ void OS_SuspendOSInterrupts(void)
   OCB_Cfg.OsInterruptSavedLevel = osGetPMR();
 
   /* Disable OS interrupts */
-  osSetPMR(OS_CAT1_PRIO_MASK);
+  osSetPMR(OS_INT_CAT1_LOWEST_PRIO_LEVEL);
 }
 
 //------------------------------------------------------------------------------------------------------------------

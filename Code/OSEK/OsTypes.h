@@ -192,9 +192,10 @@ typedef struct
   uint32                  OsLockDispatcher;
   uint32                  OsCat2InterruptLevel;
   uint32                  OsCurrentSystemStackPtr;
-  uint32                  OsInterruptNestingDeepth;
+  uint32                  OsInterruptNestingDepth;
   uint32                  OsInterruptNestingSavedLevel;
   uint32                  OsInterruptSavedLevel;
+  uint32                  OsIntNestSavedStackPointer[8];
 }Ocb_t;
 
 typedef struct

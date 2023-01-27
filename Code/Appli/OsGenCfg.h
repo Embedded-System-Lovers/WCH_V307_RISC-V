@@ -61,11 +61,11 @@ OS_CONFIG_BEGIN
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*   9  Breakpoint callback interrupt                              */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  10  Reserved                                                   */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  11  Reserved                                                   */
-    OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  12  System Tick Timer                                          */
+    OS_INTERRUPT_CAT2_DEF(SysTickTimer, 15, NESTED)  /*  12  System Tick Timer                                          */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  13  Reserved                                                   */
-    OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  14  Software interrupt                                         */
+    OS_INTERRUPT_CAT1_DEF(OsDispatchHandler, 15, NESTED)  /*  14  Software interrupt                                         */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  15  Reserved                                                   */
-    OS_INTERRUPT_CAT2_DEF(WindowWatchdogInt, 0, NOT_NESTED)  /*  16  Window Watchdog interrupt                                  */
+    OS_INTERRUPT_CAT2_DEF(WindowWatchdogInt, 2, NOT_NESTED)  /*  16  Window Watchdog interrupt                                  */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  17  PVD through EXTI line detection interrupt                  */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  18  Tamper interrupt                                           */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  19  RTC global interrupt                                       */
@@ -178,7 +178,7 @@ OS_CONFIG_BEGIN
   //=============================================================================
   //  Interrupt Mask Configuration
   //=============================================================================
-  #define OS_CAT1_PRIO_MASK       0U
-  #define OS_USER_INTERRUPTS_START_IDX  16u
+  #define OS_INT_CAT1_LOWEST_PRIO_LEVEL       1UL << 4
+
 
 OS_CONFIG_END
