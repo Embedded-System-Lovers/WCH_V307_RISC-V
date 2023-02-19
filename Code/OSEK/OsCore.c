@@ -92,7 +92,7 @@ void OS_StartOS(OsAppModeType Mode)
     osInitInterrupts();
     
     /* Call startup hook function */
-    #if(STARTUPHOOK)
+    #if(OS_STARTUPHOOK)
     osStartupHook();
     #endif
 
@@ -216,7 +216,7 @@ uint32 OsDispatcher(uint32 StackPtr)
       OsClearTaskPrioReady(OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->Prio);
       
       /* Call osPreTaskHook */
-      #if(PRETASKHOOK)
+      #if(OS_PRETASKHOOK)
       osPreTaskHook();
       #endif
       
@@ -239,7 +239,7 @@ uint32 OsDispatcher(uint32 StackPtr)
       OsClearTaskPrioReady(OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->Prio);
       
       /* Call osPreTaskHook */
-      #if(PRETASKHOOK)
+      #if(OS_PRETASKHOOK)
       osPreTaskHook();
       #endif
     }
@@ -415,7 +415,7 @@ OsAppModeType OS_GetActiveApplicationMode(void)
 //------------------------------------------------------------------------------------------------------------------
 void OS_ShutdownOS(OsStatusType Error)
 {
-#if(SHUTDOWNHOOK)
+#if(OS_SHUTDOWNHOOK)
   osShutdownHook(Error);
 #else
   (void)Error;
@@ -620,7 +620,7 @@ void osErrTaskExitWithoutTerminate(void)
 void OsKernelError(OsStatusType err)
 {
   DISABLE_INTERRUPTS();
-  #if(ERRORHOOK)
+  #if(OS_ERRORHOOK)
     osErrorHook(err);
   #else
     (void)err;

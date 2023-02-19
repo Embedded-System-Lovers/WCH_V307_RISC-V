@@ -47,6 +47,11 @@
 #include "SysTick.h"
 
 //=========================================================================================
+// Externs
+//=========================================================================================
+extern uint32 osIntVectTable;
+
+//=========================================================================================
 // Functions Prototype
 //=========================================================================================
 uint32 osGetPMR(void);
@@ -56,7 +61,6 @@ void osHwTimerStart(void);
 void osHwTimerReload(void);
 void osRestoreSavedIntState(void);
 void osSaveAndDisableIntState(void);
-void OsRunSysTickIsr(void);
 void OsCatchAllCpuExceptions(void);
 void OsIsr_SysTickTimerFunc(void);
 uint32 osGetHwIntNestingLevel(void);

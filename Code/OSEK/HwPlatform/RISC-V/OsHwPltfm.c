@@ -129,6 +129,8 @@ void osInitInterrupts(void)
   uint32 u32IntRegOffset    = 0;
   uint32 u32IntBitPosition  = 0;
   
+  OsSetIntVectTableAddress((uint32*)&osIntVectTable);
+
   for(uint32 IntId = 0; IntId <= 103; IntId++)
   {
     u32IntRegOffset    = (uint32)(IntId / 32u);
@@ -171,7 +173,7 @@ ISR(WindowWatchdogInt)
 //------------------------------------------------------------------------------------------------------------------
 void osSetPMR(uint32 level)
 {
-  PFIC->ITHRESDR.reg = level;
+  PFIC->ITHRESDR.reg = (uint32)level << 4;
 }
 
 //------------------------------------------------------------------------------------------------------------------
@@ -185,7 +187,7 @@ void osSetPMR(uint32 level)
 //------------------------------------------------------------------------------------------------------------------
 uint32 osGetPMR(void)
 {
-  return(PFIC->ITHRESDR.reg);
+  return(PFIC->ITHRESDR.reg >> 4);
 }
 
 //------------------------------------------------------------------------------------------------------------------

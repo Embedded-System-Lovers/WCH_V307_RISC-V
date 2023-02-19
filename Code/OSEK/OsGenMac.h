@@ -95,6 +95,10 @@
 #undef OS_INTERRUPT_CAT2_DEF
 #endif
 
+#ifdef OS_INTERRUPT_CATx_DEF
+#undef OS_INTERRUPT_CATx_DEF
+#endif
+
 #ifdef OS_INTERRUPT_END
 #undef OS_INTERRUPT_END
 #endif
@@ -150,6 +154,7 @@
 #define OS_INTERRUPT_BEGIN                                                      
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)                                
 #define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)                                
 #define OS_INTERRUPT_END                                                        
 
 #define OS_NUMBER_OF_ISR
@@ -194,6 +199,7 @@
 #define OS_INTERRUPT_BEGIN                                                      extern const OsInterruptConfigType IsrLookupTable[];
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)                                extern void IsrFunc(void);
 #define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                extern ISR(IsrFunc);
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)                                extern void IsrFunc(void);
 #define OS_INTERRUPT_END                                                         
 
 #define OS_FE_INTERRUPT_BEGIN                                                   extern const FeIsr_t FeIntLookupTable[];
@@ -228,6 +234,7 @@
 #define OS_INTERRUPT_BEGIN                                                       const OsInterruptConfigType IsrLookupTable[] = {
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)                                 {(pIsrFunc)&IsrFunc, (uint8)Prio, (OsInterruptNestingType)Type},
 #define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                 {pISR(IsrFunc), (uint8)Prio, (OsInterruptNestingType)Type},
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)                                 {(pIsrFunc)&IsrFunc, (uint8)Prio, (OsInterruptNestingType)Type},
 #define OS_INTERRUPT_END                                                         };
 
 #define OS_FE_INTERRUPT_BEGIN                                                    const FeIsr_t FeIntLookupTable[] = {
@@ -262,6 +269,7 @@
 #define OS_INTERRUPT_BEGIN
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)                                      
 #define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                      
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)                                      
 #define OS_INTERRUPT_END
 
 #define OS_FE_INTERRUPT_BEGIN
@@ -269,13 +277,13 @@
 #define OS_FE_INTERRUPT_END  
 
 //Globals in OsTcb.c
-#if(INTERRUPT == 1)
+#if(OS_INTERRUPT_ENABLED == 1)
   const unsigned int osNbrOfInterrupts = sizeof(IsrLookupTable)/sizeof(OsInterruptConfigType);
 #else
   const unsigned int osNbrOfInterrupts = 0;
 #endif
 
-#if(FE_INTERRUPT == 1)
+#if(OS_FE_INTERRUPT_ENABLED == 1)
   const unsigned int osNbrOfExceptions = sizeof(FeIntLookupTable) / sizeof(FeIsr_t);
 #else
   const unsigned int osNbrOfExceptions = 0;
@@ -309,6 +317,7 @@
 #define OS_INTERRUPT_BEGIN
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)                                    
 #define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                    
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)                                    
 #define OS_INTERRUPT_END
 
 #define OS_FE_INTERRUPT_BEGIN
@@ -343,6 +352,7 @@
 #define OS_INTERRUPT_BEGIN
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)
 #define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)
 #define OS_INTERRUPT_END
 
 #define OS_FE_INTERRUPT_BEGIN
@@ -374,11 +384,48 @@
 #define OS_RESOURCE_DEF(Name,CeilingPrio,AuthorizedTasks...)
 #define OS_RESOURCE_END
 
-#define OS_INTERRUPT_BEGIN                                                       osInternalVectorTable:
+#define OS_INTERRUPT_BEGIN                                                       osVectoredIVT:
 
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)                                 j IsrFunc
-#define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                 j OsIsr_##IsrFunc##Func
+#define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                 j OsCat2IsrWrapper
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)                                 j IsrFunc
 #define OS_INTERRUPT_END                                                         .size osInternalVectorTable, .-osInternalVectorTable
+
+#define OS_FE_INTERRUPT_BEGIN
+#define OS_FE_INTERRUPT_CAT2_DEF(FeIsrFunc)
+#define OS_FE_INTERRUPT_END  
+
+#define OS_MULTICORE_END
+#define OS_CONFIG_END
+
+#elif defined(OS_GEN_LOOKUP_IVT)
+
+#define OS_MULTICORE_BEGIN
+#define OS_CONFIG_BEGIN
+
+#define OS_TASK_BEGIN
+#define OS_TASK_DEF(Name,Prio,StackSize,NbOfActiv,AutoStart,TaskType,SchedType)  
+#define OS_TASK_END
+
+#define OS_EVENT_BEGIN
+#define OS_EVENT_DEF(Event, Mask)
+#define OS_EVENT_END
+
+#define OS_ALARM_BEGIN
+#define OS_ALARM_DEF(Name,Action,Event,task,Callback)
+#define OS_ALARM_AUTO_DEF(Name,Increment,Cycle,Action,Event,task,Callback)
+#define OS_ALARM_END
+
+#define OS_RESOURCE_BEGIN
+#define OS_RESOURCE_DEF(Name,CeilingPrio,AuthorizedTasks...)
+#define OS_RESOURCE_END
+
+#define OS_INTERRUPT_BEGIN                                                       osLookupIVT:
+
+#define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)                                 .word IsrFunc
+#define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)                                 .word OsCat2IsrWrapper
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)                                 .word IsrFunc
+#define OS_INTERRUPT_END                                                         
 
 #define OS_FE_INTERRUPT_BEGIN
 #define OS_FE_INTERRUPT_CAT2_DEF(FeIsrFunc)
@@ -412,6 +459,7 @@
 #define OS_INTERRUPT_BEGIN
 #define OS_INTERRUPT_CAT1_DEF(IsrFunc,Prio,Type)
 #define OS_INTERRUPT_CAT2_DEF(IsrFunc,Prio,Type)
+#define OS_INTERRUPT_CATx_DEF(IsrFunc,Prio,Type)
 #define OS_INTERRUPT_END
 
 #define OS_FE_INTERRUPT_BEGIN
@@ -456,4 +504,8 @@
 
 #ifdef OS_GEN_VECTORED_IVT
 #undef OS_GEN_VECTORED_IVT
+#endif
+
+#ifdef OS_GEN_LOOKUP_IVT
+#undef OS_GEN_LOOKUP_IVT
 #endif

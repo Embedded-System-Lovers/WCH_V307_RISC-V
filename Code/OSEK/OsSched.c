@@ -129,7 +129,7 @@ OsStatusType OS_Schedule(void)
           if(OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->TaskSchedType == FULL_PREEMPT)
           {
             /* Call osPostTaskHook */
-            #if(POSTTASKHOOK)
+            #if(OS_POSTTASKHOOK)
             osPostTaskHook();
             #endif
 
@@ -165,7 +165,7 @@ OsStatusType OS_Schedule(void)
         else if (OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->TaskStatus == SUSPENDED || OCB_Cfg.pTcb[OCB_Cfg.CurrentTaskIdx]->TaskStatus == WAITING)
         {
           /* Call osPostTaskHook */
-          #if(POSTTASKHOOK)
+          #if(OS_POSTTASKHOOK)
           osPostTaskHook();
           #endif
 
@@ -208,7 +208,7 @@ OsStatusType OS_Schedule(void)
         /* context switch need to be performed => System will goes to os internal idle loop */
 
         /* Call PostTaskHook */
-        #if(POSTTASKHOOK)
+        #if(OS_POSTTASKHOOK)
         osPostTaskHook();
         #endif
 

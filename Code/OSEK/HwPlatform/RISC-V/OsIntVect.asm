@@ -12,19 +12,22 @@
 #include"OsTypes.h"
 
 /*-------------------------------------------------------------------------------------------------------------------------*/
-/* \brief  OsDummyAsmFunc                                                                                                  */
+/* \brief  OS Interrupt Vector Table                                                                                       */
 /*                                                                                                                         */
-/* \descr  A dummy assembly function to demostrate the capability of building a file with mixed languages (C and assembly) */
+/* \descr  Lookup interrupt vector table type                                                                              */
 /*                                                                                                                         */
 /* \param  void                                                                                                            */
 /*                                                                                                                         */
 /* \return void                                                                                                            */
 /*-------------------------------------------------------------------------------------------------------------------------*/
-OS_ASM_SECTION(".text")
+OS_ASM_SECTION(".rodata")
 OS_ASM_ALIGN(4)
-OS_ASM_GLOBL(OsDummyAsmFunc)
-OS_ASM_FUNC(OsDummyAsmFunc)
-OS_ASM_LABEL(OsDummyAsmFunc)
-                              nop
-                              ret
-OS_ASM_SIZE(OsDummyAsmFunc)
+OS_ASM_GLOBL(osIntVectTable)
+OS_ASM_OBJECT(osIntVectTable)
+OS_ASM_LABEL(osIntVectTable)
+
+#define OS_GEN_LOOKUP_IVT
+#include "OsGenCfg.h"
+
+
+OS_ASM_SIZE(osIntVectTable)

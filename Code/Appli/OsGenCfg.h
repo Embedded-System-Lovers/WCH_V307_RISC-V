@@ -63,7 +63,7 @@ OS_CONFIG_BEGIN
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  11  Reserved                                                   */
     OS_INTERRUPT_CAT2_DEF(SysTickTimer, 15, NESTED)  /*  12  System Tick Timer                                          */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  13  Reserved                                                   */
-    OS_INTERRUPT_CAT1_DEF(OsDispatchHandler, 15, NESTED)  /*  14  Software interrupt                                         */
+    OS_INTERRUPT_CATx_DEF(OsDispatchHandler, 15, NESTED)  /*  14  Software interrupt                                         */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  15  Reserved                                                   */
     OS_INTERRUPT_CAT2_DEF(WindowWatchdogInt, 2, NOT_NESTED)  /*  16  Window Watchdog interrupt                                  */
     OS_INTERRUPT_CAT2_DEF(Undefined, 0, NOT_NESTED)  /*  17  PVD through EXTI line detection interrupt                  */
@@ -158,27 +158,27 @@ OS_CONFIG_BEGIN
   //=============================================================================
   //  Hooks Configuration
   //=============================================================================
-  #define STARTUPHOOK            0
-  #define ERRORHOOK              0
-  #define SHUTDOWNHOOK           0
-  #define PRETASKHOOK            0
-  #define POSTTASKHOOK           0
+  #define OS_STARTUPHOOK            0
+  #define OS_ERRORHOOK              0
+  #define OS_SHUTDOWNHOOK           0
+  #define OS_PRETASKHOOK            0
+  #define OS_POSTTASKHOOK           0
 
   //=============================================================================
   //  Interrupt Configuration
   //=============================================================================
-  #define FE_INTERRUPT           0
-  #define INTERRUPT              1
+  #define OS_FE_INTERRUPT_ENABLED           0
+  #define OS_INTERRUPT_ENABLED              1
 
   //=============================================================================
   //  Clock Configuration
   //=============================================================================
-  #define SYS_TICK_US_VAL        1000U
+  #define OS_SYS_TICK_US_VAL        1000U
 
   //=============================================================================
   //  Interrupt Mask Configuration
   //=============================================================================
-  #define OS_INT_CAT1_LOWEST_PRIO_LEVEL       1UL << 4
+  #define OS_INT_CAT1_LOWEST_PRIO_LEVEL       1UL
 
 
 OS_CONFIG_END

@@ -161,7 +161,7 @@ OSEK_SRC_FILES := $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsSwClz.s          \
                   $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsAsm.s            \
                   $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsHwSchedPrio.s    \
                   $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsHwPltfm.c        \
-                  $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsDummy.asm        \
+                  $(SRC_DIR)/OSEK/HwPlatform/RISC-V/OsIntVect.asm      \
                   $(SRC_DIR)/OSEK/OsAlarm.c                            \
                   $(SRC_DIR)/OSEK/OsCore.c                             \
                   $(SRC_DIR)/OSEK/OsEvt.c                              \
@@ -173,7 +173,6 @@ SRC_FILES := $(SRC_DIR)/Appli/main.c         \
              $(SRC_DIR)/Mcal/Mcu.c           \
              $(SRC_DIR)/Mcal/SysTick.c       \
              $(SRC_DIR)/Startup/boot.s       \
-             $(SRC_DIR)/Startup/intvect.c    \
              $(SRC_DIR)/Startup/Startup.c    \
              $(SRC_DIR)/Appli/tasks.c        \
              $(OSEK_SRC_FILES)
@@ -189,6 +188,12 @@ INC_FILES := $(SRC_DIR)         \
              $(SRC_DIR)/Mcal    \
              $(SRC_DIR)/Startup \
              $(OSEK_INC_FILES)   
+
+#####################################################################################
+# Preprocessing flag
+#####################################################################################
+PFLAGS       := -E
+FILES_i      := $(addprefix $(OBJ_PATH)/, $(notdir $(addsuffix .i, $(basename $(SRC_FILES)))))
 
 ############################################################################################
 # Rules

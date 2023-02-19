@@ -54,5 +54,6 @@ uint32 OsGetSavedStackPointer(void);
 uint32 OsIntCallDispatch(uint32 StackPtr);
 void OsRunCat2Isr(void);
 void osErrTaskExitWithoutTerminate(void);
+void OsSetIntVectTableAddress(uint32* address);
 
 #endif

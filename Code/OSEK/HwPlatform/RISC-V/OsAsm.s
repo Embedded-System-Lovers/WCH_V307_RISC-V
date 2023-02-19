@@ -246,6 +246,30 @@ OsGetCurrentSP:
 
 .size OsGetCurrentSP, .-OsGetCurrentSP
 
+
+/* ----------------------------------------------------------------------------------------------------------------- */
+/*  \brief  OsSetIntVectTableAddress : void OsSetIntVectTableAddress(unsigned int* address)                          */
+/*                                                                                                                   */
+/*  \descr                                                              */
+/*                                                                                                                   */
+/*  \param                                     */
+/*                                                                                                                   */
+/*  \return void                                                                                                     */
+/* ----------------------------------------------------------------------------------------------------------------- */
+.section ".text"
+.align 4
+.globl  OsSetIntVectTableAddress
+.type   OsSetIntVectTableAddress, % function
+
+OsSetIntVectTableAddress:
+                          /* setup the interrupt vector table */
+                          ori a0, a0, 3
+                          csrw mtvec, a0
+                          ret
+
+.size OsSetIntVectTableAddress, .-OsSetIntVectTableAddress
+
+
 /*
 
 -----------------------------------------------------------------
