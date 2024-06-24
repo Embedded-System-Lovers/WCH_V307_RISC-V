@@ -14,7 +14,7 @@ RISC-V MCU CH32V307VCT6 board  (CH32V307V-EVT-R1).
 
 Features include:
   - CPU, power, chip, clock and PLL initialization,
-  - timebase derived from `mtimer`,
+  - timebase derived from the `R32_STK` timer,
   - blinky LED show with adjustable frequency,
   - implementation in C99 with absolute minimal use of assembly.
 
@@ -52,8 +52,7 @@ Build on `*nix*` is easy using `gcc-riscv32-unknown-elf`
 Both Make and Cmake can be used to build the Application:
 
 ```sh
-cd WCH_V307_RISC-V
-cd Build
+cd WCH_V307_RISC-V/Build
 ```
 ### Make
 
@@ -66,8 +65,8 @@ and assembly list file are created in the `Output` directory.
 
 If `gcc-riscv32-unknown-elf` is not installed, it can easily
 be obtained from [embecosm](https://www.embecosm.com/resources/tool-chain-downloads/#riscv-stable).
-Add the path of the RISC-V GCC tools' bin folder to `$PATH`
-in the usual `*nix` way.
+If necessary, add the path of the RISC-V GCC tools' bin folder to
+`$PATH` in the usual `*nix` way.
 
 ## Continuous Integration
 
@@ -77,6 +76,5 @@ and `macos-latest` using GitHub Actions.
 
 ## Licensing
 
-  - The source and build code written for this repo is licensed under [_The_ _Unlicense_](./LICENSE).
-  - Also the system-register file [`riscv-csr.h`](https://github.com/Embedded-System-Lovers/RED-V_SiFive_RISC-V_FE310_SoC/blob/master/Code/Mcal/riscv-csr.h), originally from [five-embedded](https://five-embeddev.com), is licenced under [_The_ _Unlicense_](./LICENSE).
-
+  - The source and build code written for this repo are licensed under [_The_ _Unlicense_](./LICENSE).
+  - The system-register file [`riscv-csr.h`](https://github.com/Embedded-System-Lovers/RED-V_SiFive_RISC-V_FE310_SoC/blob/master/Code/Mcal/riscv-csr.h), originally from [five-embedded](https://five-embeddev.com), is also licenced under [_The_ _Unlicense_](./LICENSE).
