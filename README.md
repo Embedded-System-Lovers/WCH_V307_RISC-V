@@ -18,8 +18,8 @@ Features include:
   - blinky LED show with adjustable frequency,
   - implementation in C99 with absolute minimal use of assembly.
 
-A clear and easy-to-understand build system based on GNUmake
-completes this fun and educational project.
+Clear and easy-to-understand build systems based on either
+GNUmake or CMake complete this fun and educational project.
 
 This repository provides keen insight on starting up
 a _bare_ _metal_ SiFive RISC-V controller. It emphasizes
@@ -40,8 +40,9 @@ The timebase for blinky is based on the `R32_STK` timer
 with an interrupt handler once per second.
 
 Blinky running on the target is shown in the image below.
-A wire-connection is required between port pins `PC0` and `LED1`
-in order to observe the blinky toggle (see the orange wire).
+A wire is required connecting port pins `PC0` and `LED1`
+in order to observe the blinky toggle. See the orange wire
+in the picture.
 
 ![](./images/wch_v307.jpg)
 
@@ -49,12 +50,12 @@ in order to observe the blinky toggle (see the orange wire).
 
 Build on `*nix*` is easy using `gcc-riscv32-unknown-elf`
 
-Both classic GNU-Make as well as CMake can be used to build the Application:
+Both classic GNUmake as well as CMake can be used to build the Application:
 
 ```sh
 cd WCH_V307_RISC-V/Build
 ```
-### Make
+### GNUmake
 
 ```sh
 ./Rebuild.sh

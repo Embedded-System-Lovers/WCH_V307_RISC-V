@@ -186,12 +186,27 @@ ifeq ($(MAKECMDGOALS),build)
 -include $(subst .o,.d,$(FILES_O))
 endif
 
-build : $(OUTPUT_DIR)/$(PRJ_NAME).elf
+build : version $(OUTPUT_DIR)/$(PRJ_NAME).elf
 
-all : $(OUTPUT_DIR)/$(PRJ_NAME).elf
+all : version $(OUTPUT_DIR)/$(PRJ_NAME).elf
+
+.PHONY : version
+version :
+	@-echo +++ query compiler version
+	@-$(CC) -v
+	@-echo
+	@-echo +++ print COPS
+	@-echo $(COPS)
+	@-echo
+	@-echo +++ print ASOPS
+	@-echo $(ASOPS)
+	@-echo
+	@-echo +++ print LOPS
+	@-echo $(LOPS)
 
 .PHONY : clean
 clean :
+	@-echo +++ clean and create temporary directories
 	@-rm -rf $(OUTPUT_DIR)  2>/dev/null || true
 	@-mkdir -p $(subst \,/,$(OBJ_DIR))
 
