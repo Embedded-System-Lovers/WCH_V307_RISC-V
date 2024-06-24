@@ -27,7 +27,7 @@ ERR_MSG_FORMATER_SCRIPT = ../Tools/Scripts/CompilerErrorFormater.py
 # Toolchain
 ############################################################################################
 
-TOOLCHAIN = riscv-none-embed
+TOOLCHAIN = riscv32-unknown-elf
 AS        = $(TOOLCHAIN)-g++
 CC        = $(TOOLCHAIN)-g++
 CPP       = $(TOOLCHAIN)-g++
@@ -36,7 +36,7 @@ OBJDUMP   = $(TOOLCHAIN)-objdump
 OBJCOPY   = $(TOOLCHAIN)-objcopy
 READELF   = $(TOOLCHAIN)-readelf
 
-PYTHON = python
+PYTHON = python3
 
 ############################################################################################
 # Optimization Compiler flags
@@ -159,6 +159,7 @@ endif
 ############################################################################################
 SRC_FILES := $(SRC_DIR)/Appli/main.c         \
              $(SRC_DIR)/Mcal/Mcu.c           \
+             $(SRC_DIR)/Mcal/Port.c          \
              $(SRC_DIR)/Mcal/SysTick.c       \
              $(SRC_DIR)/Startup/boot.s       \
              $(SRC_DIR)/Startup/intvect.c    \

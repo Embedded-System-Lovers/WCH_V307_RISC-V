@@ -1,7 +1,12 @@
 # WCH_V307_RISC-V
 Bare metal programming on WCH RISC-V MCU CH32V307VCT6 board (CH32V307V-EVT-R1)
 
-[![Build Status](https://github.com/Embedded-System-Lovers/WCH_V307_RISC-V/actions/workflows/WCH_V307_RISC-V.yml/badge.svg)](https://github.com/Embedded-System-Lovers/WCH_V307_RISC-V/actions)
+<p align="center">
+    <a href="https://github.com/Embedded-System-Lovers/WCH_V307_RISC-V/actions">
+        <img src="https://github.com/Embedded-System-Lovers/WCH_V307_RISC-V/actions/workflows/WCH_V307_RISC-V.yml/badge.svg" alt="Build Status"></a>
+    <a href="https://github.com/Embedded-System-Lovers/WCH_V307_RISC-V/blob/master/LICENSE">
+        <img src="https://img.shields.io/badge/license-Unlicense-blue.svg" alt="Unlicense"></a>
+</p>
 
 This repository implements an entirely manually-written, pure
 _bare_ _metal_ Blinky Project for the SiFive
@@ -9,7 +14,7 @@ RISC-V MCU CH32V307VCT6 board  (CH32V307V-EVT-R1).
 
 Features include:
   - CPU, power, chip, clock and PLL initialization,
-  - timebase derived from `mtimer`,
+  - timebase derived from the `R32_STK` timer,
   - blinky LED show with adjustable frequency,
   - implementation in C99 with absolute minimal use of assembly.
 
@@ -17,7 +22,9 @@ A clear and easy-to-understand build system based on GNUmake
 completes this fun and educational project.
 
 This repository provides keen insight on starting up
-a _bare_ _metal_ SiFive RISC-V controller.
+a _bare_ _metal_ SiFive RISC-V controller. It emphasizes
+simplicity and independence from monolithic toolchains
+through its lightweight, self-written implementation.
 
 ## Details on the Application
 
@@ -29,38 +36,45 @@ for LED blinky.
 
 The adjustable LED-phase (its half-period) can be tuned
 to provide a rudimentary, visible blinky LED show.
-The timebase for blinky is based on the `mtimer`
-interrupt handler.
+The timebase for blinky is based on the `R32_STK` timer
+with an interrupt handler once per second.
+
+Blinky running on the target is shown in the image below.
+A wire-connection is required between port pins `PC0` and `LED1`
+in order to observe the blinky toggle (see the orange wire).
+
+![](./images/wch_v307.jpg)
 
 ## Building the Application
 
-Build on `*nix*` is easy using an installed `gcc-riscv-none-embed`
+Build on `*nix*` is easy using `gcc-riscv32-unknown-elf`
 
-Make or CMake can be used to build the Application:
+Both Make and Cmake can be used to build the Application:
 
 ```sh
-cd WCH_V307_RISC-V
+cd WCH_V307_RISC-V/Build
 ```
 ### Make
+
 ```sh
-cd Build
-bash Rebuild.sh
+./Rebuild.sh
 ```
-### CMake
-```sh
-mkdir -p Output && cd Output
-cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-unix.cmake .. && make
-```
+
 The build results including ELF-file, HEX-mask, MAP-file
 and assembly list file are created in the `Output` directory.
 
-If `gcc-riscv-none-embed` is not installed, it can easily
-be obtained [here](https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases).
-Add the path of the RISC-V GCC tools' bin folder to `$PATH`
-in the usual `*nix` way.
+If `gcc-riscv32-unknown-elf` is not installed, it can easily
+be obtained from [embecosm](https://www.embecosm.com/resources/tool-chain-downloads/#riscv-stable).
+If necessary, add the path of the RISC-V GCC tools' bin folder to
+`$PATH` in the usual `*nix` way.
 
 ## Continuous Integration
 
 CI runs on pushes and pull-requests with simple
-at the moment a single build including result verification
-runs on `ubuntu-latest` using GitHub Actions.
+build(s) including result verification on `ubuntu-latest`
+and `macos-latest` using GitHub Actions.
+
+## Licensing
+
+  - The source and build code written for this repo are licensed under [_The_ _Unlicense_](./LICENSE).
+  - The system-register file [`riscv-csr.h`](https://github.com/Embedded-System-Lovers/RED-V_SiFive_RISC-V_FE310_SoC/blob/master/Code/Mcal/riscv-csr.h), originally from [five-embedded](https://five-embeddev.com), is also licenced under [_The_ _Unlicense_](./LICENSE).

@@ -18,7 +18,7 @@
 //=========================================================================================
 // Includes
 //=========================================================================================
-#include "SysTick.h"
+#include <SysTick.h>
 
 //=========================================================================================
 // Defines
@@ -71,7 +71,8 @@ void SysTick_Init(void)
 //-----------------------------------------------------------------------------------------
 void SysTick_Start(uint64 timeout)
 {
-  *(volatile uint64*)(&R32_STK_CMPLR->u32Reg) = (uint64)timeout;
+  *(volatile uint64*) (&R32_STK_CMPLR->u32Reg) = (uint64) timeout;
+
   R32_STK_CTLR->bit.u1STE = 1u;
 }
 
@@ -98,6 +99,7 @@ void SysTick_Stop(void)
 void Isr_SysTick(void)
 {
   GPIOC->OUTDR.bit.ODR0 ^= 1u;
+
   R32_STK_SR->bit.u1CNTIF = 0u;
 }
 #endif
