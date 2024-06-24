@@ -18,8 +18,8 @@ Features include:
   - blinky LED show with adjustable frequency,
   - implementation in C99 with absolute minimal use of assembly.
 
-Clear and easy-to-understand build systems based on either
-GNUmake or CMake complete this fun and educational project.
+A clear and easy-to-understand build system based on GNUmake
+completes this fun and educational project.
 
 This repository provides keen insight on starting up
 a _bare_ _metal_ SiFive RISC-V controller. It emphasizes
@@ -39,6 +39,10 @@ to provide a rudimentary, visible blinky LED show.
 The timebase for blinky is based on the `mtimer`
 interrupt handler.
 
+Blinky running on the target is shown in the image below.
+
+![](./images/wch_v307.jpg)
+
 ## Building the Application
 
 Build on `*nix*` is easy using `gcc-riscv32-unknown-elf`
@@ -53,13 +57,6 @@ cd Build
 
 ```sh
 ./Rebuild.sh
-```
-
-### CMake
-
-```sh
-mkdir Output && cd Output
-cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-unix.cmake .. && make
 ```
 
 The build results including ELF-file, HEX-mask, MAP-file
