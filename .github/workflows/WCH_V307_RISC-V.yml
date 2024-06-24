@@ -27,6 +27,27 @@ jobs:
           bash ./Rebuild.sh
           ls -la ../Output/BareMetal_WCH_V307_RISC-V.hex
         working-directory: ./Build
+  target-gcc-riscv32-unknown-elf-cmake:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: |
+          wget --no-check-certificate https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu2204-release/10/artifact/riscv32-embecosm-ubuntu2204-gcc13.2.0.tar.gz
+          tar -xzf riscv32-embecosm-ubuntu2204-gcc13.2.0.tar.gz -C ${{ runner.workspace }}
+      - name: target-gcc-riscv32-unknown-elf-cmake
+        run: |
+          mkdir -p Output && cd Output
+          PATH="${{ runner.workspace }}/riscv32-embecosm-ubuntu2204-gcc13.2.0/bin:$PATH"
+          echo 'query compiler version'
+          riscv32-unknown-elf-g++ -v
+          cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-unix.cmake .. && make
+          ls -la ./BareMetal_WCH_V307_RISC-V.hex
   target-gcc-riscv32-unknown-elf-macos:
     runs-on: macos-latest
     defaults:
