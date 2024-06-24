@@ -36,10 +36,12 @@ for LED blinky.
 
 The adjustable LED-phase (its half-period) can be tuned
 to provide a rudimentary, visible blinky LED show.
-The timebase for blinky is based on the `mtimer`
-interrupt handler.
+The timebase for blinky is based on the `R32_STK` timer
+with an interrupt handler once per second.
 
 Blinky running on the target is shown in the image below.
+A wire-connection is required between port pins `PC0` and `LED1`
+in order to observe the blinky toggle (see the orange wire).
 
 ![](./images/wch_v307.jpg)
 
