@@ -48,7 +48,7 @@ OPT_MODIFIED_O2 = -O2                               \
 
 NO_OPT = -O0
 
-OPT = $(NO_OPT)
+OPT = $(OPT_MODIFIED_O2)
 
 ############################################################################################
 # GCC Compiler verbose flags

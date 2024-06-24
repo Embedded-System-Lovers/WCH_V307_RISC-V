@@ -63,11 +63,13 @@ jobs:
           fetch-depth: '0'
       - name: update-tools
         run: |
-          wget --no-check-certificate https://github.com/xpack-dev-tools/riscv-none-embed-gcc-xpack/releases/download/v10.2.0-1.2/xpack-riscv-none-embed-gcc-10.2.0-1.2-linux-x64.tar.gz
-          tar -xvzf xpack-riscv-none-embed-gcc-10.2.0-1.2-linux-x64.tar.gz
+          wget --no-check-certificate https://buildbot.embecosm.com/job/riscv32-gcc-ubuntu2204-release/10/artifact/riscv32-embecosm-ubuntu2204-gcc13.2.0.tar.gz
+          tar -xzf riscv32-embecosm-ubuntu2204-gcc13.2.0.tar.gz -C ${{ runner.workspace }}
       - name: target-riscv-none-embed
         run: |
+          PATH="${{ runner.workspace }}/riscv32-embecosm-ubuntu2204-gcc13.2.0/bin:$PATH"
+          echo 'query compiler version'
+          riscv32-unknown-elf-g++ -v
           mkdir -p Output && cd Output
-          PATH=../xpack-riscv-none-embed-gcc-10.2.0-1.2/bin:$PATH
           cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-unix.cmake .. && make
           ls -la ./BareMetal_WCH_V307_RISC-V.hex

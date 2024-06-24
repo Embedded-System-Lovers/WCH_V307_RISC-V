@@ -49,7 +49,7 @@ in order to observe the blinky toggle (see the orange wire).
 
 Build on `*nix*` is easy using `gcc-riscv32-unknown-elf`
 
-Both Make and Cmake can be used to build the Application:
+Both classic GNU-Make as well as CMake can be used to build the Application:
 
 ```sh
 cd WCH_V307_RISC-V/Build
@@ -58,6 +58,12 @@ cd WCH_V307_RISC-V/Build
 
 ```sh
 ./Rebuild.sh
+```
+
+### CMake
+```sh
+mkdir Output && cd Output
+cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-unix.cmake .. && make
 ```
 
 The build results including ELF-file, HEX-mask, MAP-file
