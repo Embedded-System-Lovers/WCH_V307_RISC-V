@@ -49,7 +49,7 @@ in order to observe the blinky toggle (see the orange wire).
 
 Build on `*nix*` is easy using `gcc-riscv32-unknown-elf`
 
-Both Make and Cmake can be used to build the Application:
+Classic GNU-Make driven via shell script can be used to build the Application:
 
 ```sh
 cd WCH_V307_RISC-V/Build
